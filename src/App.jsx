@@ -1,17 +1,16 @@
-import { Outlet } from 'react-router-dom'
-import SpreadsheetGrid from './components/Spreadsheet'
 
-
-function App() {
-
-  return (
-    <div className=''>
-      <div className='flex flex-col'>
-        <Outlet>
-          <SpreadsheetGrid/>
-        </Outlet>
-      </div>
-    </div>
+import { createBrowserRouter,BrowserRouter, Routes, Route, HashRouter, RouterProvider } from "react-router-dom";
+import DashBoard from "./components/DashBoard";
+const App=()=>{
+  const router = createBrowserRouter([
+    {
+      path:'/',
+      element:<DashBoard/>
+    }
+  ]);
+  
+  return(
+    <RouterProvider router={router} ></RouterProvider>
   )
 }
 
