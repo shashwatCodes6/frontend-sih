@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DashBoard from "./components/DashBoard";
 import { Login } from "./components/Signin";
 import { SignUp } from "./components/SignUp";
-
+import Progress from "./components/Progress";
 
 const App=()=>{
   const router = createBrowserRouter([
@@ -16,6 +16,9 @@ const App=()=>{
     },{
       path:'/signup',
       element:<SignUp/>
+    },{
+      path:'/progress/:id',
+      element:<Progress/>
     }
   ]);
   
