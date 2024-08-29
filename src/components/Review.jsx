@@ -32,6 +32,10 @@ import {
   
   export function Reviews() {
     return (
+      <div>
+        <div className="text-4xl flex justify-center m-5 font-semibold">
+          Reviews
+        </div>
       <div className="flex justify-center m-2">
         <Carousel
           opts={{
@@ -56,6 +60,7 @@ import {
           <CarouselPrevious/>
           <CarouselNext/>
         </Carousel>
+      </div>
       </div>
     );
   }
