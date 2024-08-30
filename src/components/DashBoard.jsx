@@ -7,7 +7,6 @@ import { Reviews } from './Review'
 export default function DashBoard() {
   return (
     <div className='h-screen w-screen'>
-        {/* //Navbar */}
         <div className='flex justify-between h-16 items-center mx-8'>
             <img src="/si.png" width="60" alt='logo'></img>
             <div className='flex justify-evenly w-56'>
