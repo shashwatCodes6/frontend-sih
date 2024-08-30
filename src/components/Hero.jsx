@@ -1,9 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 
-export default function Hero() {
+export default function AnimatedText() {
+  const [displayedText, setDisplayedText] = useState('');
+  const text = "Where Compassion Meets Technology";
+  const words = text.split(' ');
+
+  useEffect(() => {
+    let wordIndex = 0;
+    const interval = setInterval(() => {
+      if (wordIndex < words.length) {
+        setDisplayedText((prev) => {
+          return prev ? `${prev} ${words[wordIndex++]}` : words[wordIndex++];
+        });
+
+      } else {
+        clearInterval(interval);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className='text-4xl flex justify-center items-center h-full'>
-         "Where Compassion Meets Technology"
+    <div className='text-4xl text-white flex justify-center items-center h-full w-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-4 rounded-lg'>
+      {displayedText}
     </div>
-  )
+  );
 }
+
