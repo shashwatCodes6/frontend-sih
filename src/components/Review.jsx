@@ -32,8 +32,8 @@ import {
   
   export function Reviews() {
     return (
-      <div>
-        <div className="text-4xl flex justify-center m-5 font-semibold">
+      <div className="m-5">
+        <div className="text-4xl flex justify-center m-8 font-semibold">
           Reviews
         </div>
       <div className="flex justify-center m-2">
@@ -49,7 +49,7 @@ import {
               <div className="p-1 h-full">
                 <Card className="h-full">
                   <CardContent className="flex flex-col items-center justify-center p-6 h-full">
-                    <span className="text-3xl font-semibold">{review.name}</span>
+                    <span className="text-xl md:text-3xl font-semibold">{review.name}</span>
                     <p className="mt-2 text-center">{review.review}</p>
                   </CardContent>
                 </Card>
