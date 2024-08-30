@@ -11,6 +11,7 @@ import { Input } from "./ui/input";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { getLocation } from "./Location";
+import MapComponent from "./MapComponent";
 
 
 
@@ -147,6 +148,7 @@ export default function Chatbot() {
                 )
               }
             </div>
+            <MapComponent lat={location.latitude} lng={location.longitude} />
           </CardContent>
           <CardFooter className="p-4 border-t">
           </CardFooter>
