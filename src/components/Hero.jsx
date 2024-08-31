@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Chatbot from './Chatbot';
 
 export default function AnimatedText() {
   const [displayedText, setDisplayedText] = useState('');
@@ -22,8 +23,9 @@ export default function AnimatedText() {
   }, []);
 
   return (
-    <div className='text-4xl text-white flex justify-center items-center h-5/6 w-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-4 mb-10 rounded-lg'>
-      {displayedText}
+    <div className='text-4xl h-screen text-white flex flex-col gap-4 justify-center items-center  w-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-4 mb-10 rounded-lg'>
+      <div>{displayedText}</div>
+      <Chatbot/>
     </div>
   );
 }

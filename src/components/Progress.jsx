@@ -1,8 +1,12 @@
 
+import { useState } from 'react'
 import { Chart } from './Chart'
 import ProgressInputs from './ProgressInputs'
 import { Link } from 'react-router-dom'
 export default function Progress() {
+  const [metrics,setMetrics]=useState([]);
+  // ye fetch krne hai!!
+
   return (
     <div className=' w-screen flex flex-col justify-center m-8'>
         <Link to="/"><div className='flex'>
