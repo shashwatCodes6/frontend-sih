@@ -98,6 +98,7 @@ const Realtime = () => {
 
   // Use `useEffect` to fetch data at regular intervals
   useEffect(() => {
+    
     const interval = setInterval(() => {
       fetchEcgData();
     }, 1000); // Fetch new data every second
