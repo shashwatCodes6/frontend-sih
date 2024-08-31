@@ -39,9 +39,9 @@ export default function Chatbot() {
         setError(err);
       }
     };
-
+    if(!location.latitude||!location.longitude)
     fetchLocation();
-  }, [open]);
+  }, [location]);
 
   console.log(messages.length);
   return (
