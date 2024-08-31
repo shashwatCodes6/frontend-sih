@@ -27,10 +27,10 @@ const MapComponent = ({ lat, lng }) => {
         console.log(locations)
         
     };
-    
+    useEffect(()=>{
     if (lat && lng) {
         searchNearbyPlaces(lat, lng, 'doctor');
-    }
+    }},[lat,lng]);
 
     return (
         <Map
