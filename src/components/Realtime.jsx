@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { Client } from "@gradio/client";
 
-// Register Chart.js components, including Filler
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -16,13 +15,14 @@ ChartJS.register(
 );
 
 const Realtime = () => {
-  const [data, setData] = useState({
-    labels: [], // Time values
-    datasets: [] // Datasets for each category
-  });
   const [client, setClient] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const chartRef = useRef(null);
+  const dataRef = useRef(null);
 
-  // Initialize the Gradio client
+  const visiblePoints = 100; // Number of data points visible at once
+  const updateInterval = 900; // Update interval in milliseconds
+
   useEffect(() => {
     const initClient = async () => {
       const gradioClient = await Client.connect("samyak152002/ecg-real-time-react");
@@ -31,109 +31,91 @@ const Realtime = () => {
     initClient();
   }, []);
 
-  // Function to fetch ECG data from the Gradio API
   const fetchEcgData = async () => {
     if (!client) return;
     try {
       const result = await client.predict("/predict", {});
-      console.log(result.data, "data"); // Log the API response data
-      const { Cat_F, Cat_N, Cat_Q, Cat_S, Cat_V, time } = result.data[0];
-      console.log(Cat_F)
-      // Prepare datasets
-      const datasets = [
-        {
-          label: 'Cat_F',
-          data: Cat_F,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          fill: true,
-          tension: 0.1,
-        },
-        {
-          label: 'Cat_N',
-          data: Cat_N,
-          borderColor: 'rgba(153, 102, 255, 1)',
-          backgroundColor: 'rgba(153, 102, 255, 0.2)',
-          fill: true,
-          tension: 0.1,
-        },
-        {
-          label: 'Cat_Q',
-          data: Cat_Q,
-          borderColor: 'rgba(255, 159, 64, 1)',
-          backgroundColor: 'rgba(255, 159, 64, 0.2)',
-          fill: true,
-          tension: 0.1,
-        },
-        {
-          label: 'Cat_S',
-          data: Cat_S,
-          borderColor: 'rgba(255, 99, 132, 1)',
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          fill: true,
-          tension: 0.1,
-        },
-        {
-          label: 'Cat_V',
-          data: Cat_V,
-          borderColor: 'rgba(54, 162, 235, 1)',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          fill: true,
-          tension: 0.1,
-        },
-      ];
-
-      setData({
-        labels: time,
-        datasets: datasets.map(dataset => ({
-          ...dataset,
-          data: dataset.data.map((value, index) => ({ x: time[index], y: value }))
-        }))
-      });
-      console.log(datasets, "datasets");
+      dataRef.current = result.data[0];
+      setCurrentIndex(0); // Reset index when new data is fetched
     } catch (error) {
       console.error("Error fetching ECG data:", error);
     }
   };
 
-  // Use `useEffect` to fetch data at regular intervals
   useEffect(() => {
-    
-    const interval = setInterval(() => {
+    if (client) {
       fetchEcgData();
-    }, 1000); // Fetch new data every second
-    return () => clearInterval(interval); // Cleanup on component unmount
-  }, [client]); // Dependency array includes `client` to re-run when client is set
+      const fetchInterval = setInterval(fetchEcgData, 1000000000); // Fetch new data every 5 seconds
+      return () => clearInterval(fetchInterval);
+    }
+  }, [client]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (dataRef.current) {
+        setCurrentIndex(prevIndex => (prevIndex + 1) % dataRef.current.time.length);
+      }
+    }, updateInterval);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (chartRef.current && dataRef.current) {
+      const chart = chartRef.current;
+      
+      const startIndex = Math.max(0, currentIndex - visiblePoints);
+      const endIndex = currentIndex;
+
+      chart.data.labels = dataRef.current.time.slice(startIndex, endIndex);
+      chart.data.datasets.forEach((dataset, i) => {
+        const key = ['Cat_F', 'Cat_N', 'Cat_Q', 'Cat_S', 'Cat_V'][i];
+        dataset.data = dataRef.current[key].slice(startIndex, endIndex);
+      });
+
+      chart.options.scales.x.min = dataRef.current.time[startIndex];
+      chart.options.scales.x.max = dataRef.current.time[endIndex - 1];
+
+      chart.update('none');
+    }
+  }, [currentIndex]);
 
   const options = {
     responsive: true,
     plugins: {
-      legend: {
-        position: 'top',
-      },
+      legend: { position: 'top' },
     },
     scales: {
       x: {
-        type: 'linear', // Use 'linear' scale if time is numeric
-        title: {
-          display: true,
-          text: 'Time (ms)',
-        },
+        type: 'linear',
+        title: { display: true, text: 'Time (s)' },
+        ticks: { maxTicksLimit: 10 },
       },
       y: {
         type: 'linear',
-        title: {
-          display: true,
-          text: 'Amplitude',
-        },
+        title: { display: true, text: 'Amplitude' },
+        min: 0,
+        max: 1,
       },
     },
+    animation: { duration: 0 },
+  };
+
+  const data = {
+    labels: [],
+    datasets: [
+      { label: 'Cat_F', data: [], borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)', fill: true, tension: 0.1 },
+      { label: 'Cat_N', data: [], borderColor: 'rgba(153, 102, 255, 1)', backgroundColor: 'rgba(153, 102, 255, 0.2)', fill: true, tension: 0.1 },
+      { label: 'Cat_Q', data: [], borderColor: 'rgba(255, 159, 64, 1)', backgroundColor: 'rgba(255, 159, 64, 0.2)', fill: true, tension: 0.1 },
+      { label: 'Cat_S', data: [], borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)', fill: true, tension: 0.1 },
+      { label: 'Cat_V', data: [], borderColor: 'rgba(54, 162, 235, 1)', backgroundColor: 'rgba(54, 162, 235, 0.2)', fill: true, tension: 0.1 },
+    ],
   };
 
   return (
     <div>
       <h2>Real-Time ECG Visualization</h2>
-      <Line data={data} options={options} />
+      <Line ref={chartRef} data={data} options={options} />
     </div>
   );
 };
