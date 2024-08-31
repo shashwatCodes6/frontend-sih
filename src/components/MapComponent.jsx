@@ -10,7 +10,7 @@ const MapComponent = ({ lat, lng }) => {
             `http://localhost:3000/api/places?lat=${latitude}&lng=${longitude}&type=${type}`
         );
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         locations = []
         if (data.results && data.results.length > 0) {
             data.results.map((key, _) => {
@@ -28,29 +28,27 @@ const MapComponent = ({ lat, lng }) => {
         
     };
     useEffect(()=>{
-    if (lat && lng) {
-        searchNearbyPlaces(lat, lng, 'doctor');
-    }},[lat,lng]);
+        if (lat && lng) {
+            searchNearbyPlaces(lat, lng, 'doctor');
+        }
+    },[lat,lng]);
 
     return (
         <Map
-        defaultZoom={13}
-        defaultCenter={ { lat, lng } }
-        mapId='DEMO_MAP_ID'
-    >
-    {
-        locations.map( poi => {
-            {/* console.log(poi) */}
-            return (
-                <AdvancedMarker
-                key={poi.key}
-                position={poi.location}>
-                    <Pin background={'#FBBC04'} glyphColor={'#000'} borderColor={'#000'} />
-                </AdvancedMarker>
-            )}
-        )
-    }
-    </Map>
+            defaultZoom={13}
+            defaultCenter={ { lat, lng } }
+            mapId='DEMO_MAP_ID'
+        >
+            {
+                locations.map( poi => {
+                    return (
+                        <AdvancedMarker key={poi.key} position={poi.location}>
+                            <Pin background={'#FBBC04'} glyphColor={'#000'} borderColor={'#000'} />
+                        </AdvancedMarker>
+                    )}
+                )
+            }
+        </Map>
   );
 };
 
