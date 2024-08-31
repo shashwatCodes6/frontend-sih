@@ -31,7 +31,7 @@ const Realtime = () => {
   };
 
   const visiblePoints = 100;
-  const updateInterval = 0.1;
+  const updateInterval = 2;
 
   useEffect(() => {
     const initClients = async () => {
@@ -74,7 +74,7 @@ const Realtime = () => {
       };
 
       fetchAllData();
-      const fetchInterval = setInterval(fetchAllData, 10000);
+      const fetchInterval = setInterval(fetchAllData, 1000);
 
       return () => clearInterval(fetchInterval);
     }
