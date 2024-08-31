@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+
 import {
   Card,
   CardContent,
@@ -8,8 +8,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "./ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { getLocation } from "./Location";
+import MapComponent from "./MapComponent";
+
+
+
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
@@ -21,6 +26,23 @@ export default function Chatbot() {
     }
   ]);
   const [inProcess, setInProcess] = useState(false)
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const loc = await getLocation();
+        setLocation(loc);
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    fetchLocation();
+  }, [open]);
+
 
   return (
     <div className="fixed bottom-4 right-4 p-3 flex flex-col justify-between">
@@ -36,21 +58,19 @@ export default function Chatbot() {
             <div className="text-gray-800">
             {
               messages.map((key, ind) => {
-                {
-                  return (key.sender === 1 ? (
-                      <div className="flex justify-end m-2">
-                        <div key={ind} className="w-fit border border-black rounded-xl p-3 text-sm">
-                          {key.message}
-                        </div>
-                      </div>
-                    ):
-                    (
-                      <div key={ind} className="flex justify-start border border-black rounded-xl p-3 w-fit max-w-64 text-sm">
+                return (key.sender === 1 ? (
+                    <div className="flex justify-end m-2">
+                      <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="w-fit border border-black rounded-xl p-3 text-sm">
                         {key.message}
                       </div>
-                    )
+                    </div>
+                  ):
+                  (
+                    <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="flex justify-start border border-black rounded-xl p-3 w-fit max-w-64 text-sm">
+                      {key.message}
+                    </div>
                   )
-                }
+                )
               })
             }
             </div>
@@ -63,7 +83,7 @@ export default function Chatbot() {
               {
                 !inProcess ? ( 
                 <button className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none"
-                  onClick={() => {
+                  onClick={async () => {
                     const currMsg = currMessage
                     setMessages([...messages, {
                       sender: 1,
@@ -74,7 +94,7 @@ export default function Chatbot() {
                     setInProcess(true)
                     axios.post("http://localhost:3000/predictDisease", {
                       text: currMsg
-                    }).then(res => {
+                    }).then(async res => {
                       setInProcess(false)
                       setMessages([...messages, {
                           sender: 1,
@@ -84,12 +104,39 @@ export default function Chatbot() {
                           message: res.data[0]
                         }
                       ])
-                      console.log(messages)
+                      // const inputString = res.data[0]
+                      
+                      // const conditionsArray = inputString.split(' ');
+
+                      // let conditions = [];
+                      // for (let i = 0; i < conditionsArray.length; ) {
+                      //   let j = i;
+                      //   let condition = "";
+                      //   while(j < conditionsArray.length && conditionsArray[j][conditionsArray[j].length - 1] !== ':'){
+                      //     condition += conditionsArray[j++] + ' ';
+                      //   }
+                      //   condition += conditionsArray[j++].slice(0, -1);
+                      //   const probability = parseFloat(conditionsArray[j]);
+                      //   conditions.push({ condition, probability });
+                      //   i = j++;
+                      // }
+
+                      // conditions.sort((a, b) => b.probability - a.probability);
+
+                      // console.log(conditions);
+                      console.log(messages, location)
                       console.log(res)
+
                     }).catch(err => {
                       setInProcess(false)
+                      alert("some error in server, pls try again later")
                       console.log("some error", err)
                     })
+                    if(location.error){
+                      console.log(error);
+                    }else{
+                      console.log(location);
+                    }
                   }}
                 >
                   <img width="24" height="24" src="https://img.icons8.com/ios-filled/50/sent.png" alt="Send" />
@@ -99,10 +146,10 @@ export default function Chatbot() {
                   <button className="bg-blue-800 text-white p-2 rounded-md focus:outline-none">
                     <img width="24" height="24" src="https://img.icons8.com/ios-filled/50/sent.png" alt="Send" />
                   </button>
-                  
                 )
               }
             </div>
+            <MapComponent lat={location.latitude} lng={location.longitude} />
           </CardContent>
           <CardFooter className="p-4 border-t">
           </CardFooter>

@@ -25,11 +25,11 @@ export function Login() {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Email</Label>
-              <Input id="name" type="email" placeholder="Whats your Email?" />
+              <Input id="email" type="email" placeholder="Whats your Email?" />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Password</Label>
-              <Input id="name" type="password" placeholder="Whats your Password?" />
+              <Input id="pass" type="password" placeholder="Whats your Password?" />
             </div>
           </div>
         </form>
