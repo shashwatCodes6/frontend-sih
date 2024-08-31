@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+
 import {
   Card,
   CardContent,
@@ -26,21 +26,22 @@ export default function Chatbot() {
     }
   ]);
   const [inProcess, setInProcess] = useState(false)
-  
-
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [error, setError] = useState(null);
 
-  const fetchLocation = async () => {
-    try {
-      const loc = await getLocation();
-      setLocation(loc);
-    } catch (err) {
-      setError(err);
-    }
-  };
 
-  fetchLocation();
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const loc = await getLocation();
+        setLocation(loc);
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    fetchLocation();
+  }, [open]);
 
 
   return (
