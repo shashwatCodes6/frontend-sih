@@ -6,12 +6,13 @@ import {
 } from "@/components/ui/chart"
 
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { month: "Sunday", desktop: 186, mobile: 80 },
+  { month: "Monday", desktop: 305, mobile: 200 },
+  { month: "Tuesday", desktop: 237, mobile: 120 },
+  { month: "Wednesday", desktop: 73, mobile: 190 },
+  { month: "Thursday", desktop: 209, mobile: 130 },
+  { month: "Friday", desktop: 214, mobile: 140 },
+  { month: "Saturday", desktop: 214, mobile: 140 },
 ];
 
 const chartConfig= {
@@ -25,10 +26,10 @@ const chartConfig= {
   },
 };
 
-export function Chart() {
+export function Chart(props) {
     return (
-        <ChartContainer config={chartConfig} className="h-2/3 w-full md:w-2/3 ">
-          <BarChart accessibilityLayer data={chartData}>
+        <ChartContainer config={props.chartConfig||chartConfig} className="h-2/3 w-full md:w-2/3 ">
+          <BarChart accessibilityLayer data={props.chartData||chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"

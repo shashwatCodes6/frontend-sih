@@ -1,9 +1,10 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import Footer from './Footer'
 export default function Navbar() {
-  return (
-    <div className='h-screen w-screen'>
+  return (<>
+    <div className='h-24 w-screen flex flex-col overflow-y-scroll'>
       <div className='flex justify-between h-16 items-center  my-2'>
           <Link to="/">
             <img src="/si.png" width="60" alt='logo'/>
@@ -16,7 +17,9 @@ export default function Navbar() {
             <Link to="/login">Login/Signup</Link>
           </div>
       </div>
-    <Outlet/>
     </div>
+    <Outlet/>
+    <Footer/>
+    </>
   )
 }

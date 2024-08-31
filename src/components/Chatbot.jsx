@@ -43,12 +43,12 @@ export default function Chatbot() {
     fetchLocation();
   }, [open]);
 
-
+  console.log(messages.length);
   return (
-    <div className="fixed bottom-4 right-4 p-3 flex flex-col justify-between">
+    <div className="w-full p-3 flex flex-col items-center justify-between">
       {open && (
-        <Card className='m-4 z-10 h-96 w-80 md:w-96 bg-white shadow-lg rounded-lg'>
-          <CardHeader className='text-xl font-semibold flex flex-row justify-between items-center p-2 border-b'>
+        <Card className='m-4 z-10 h-96 w-1/2 bg-white shadow-lg rounded-lg'>
+          <CardHeader className='text-xl  font-semibold flex flex-row justify-between items-center p-2 border-b'>
             <span>Chat with AI</span>
             <button onClick={() => setOpen(prev => !prev)} className='text-gray-600 hover:text-gray-900'>
               <img width="25" height="25" src="https://img.icons8.com/ios/50/multiply-2.png" alt="Close chat" />
@@ -155,11 +155,11 @@ export default function Chatbot() {
           </CardFooter>
         </Card>
       )}
-      <div className="flex justify-end">
-        <button onClick={() => setOpen(prev => !prev)} className='w-24 h-24 bg-blue-500 text-white rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-blue-600 focus:outline-none'>
-          <span>Chat</span>
+      {!open&&<div className="flex justify-center w-full">
+        <button onClick={() => setOpen(prev => !prev)} className='w-1/4 rounded-xl h-20 bg-black text-white  shadow-lg flex items-center justify-center text-2xl hover:bg-white hover:text-black focus:outline-none'>
+          <span>{messages.length==1?"Click to Start Chat":"Continue Chat"}</span>
         </button>
-      </div>
+      </div>}
     </div>
   );
 }
