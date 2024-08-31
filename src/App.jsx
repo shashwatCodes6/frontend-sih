@@ -6,6 +6,8 @@ import { SignUp } from "./components/SignUp";
 import Progress from "./components/Progress";
 import Navbar from "./components/Navbar";
 import Realtime from "./components/Realtime"
+import { Logout } from "./components/Logout";
+
 
 const App=()=>{
   const router = createBrowserRouter([
@@ -22,6 +24,9 @@ const App=()=>{
         },{
           path:'/signup',
           element:<SignUp/>
+        },{
+          path:'/logout',
+          element:<Logout/>
         },{
           path:'/progress/:id',
           element:<Progress/>
