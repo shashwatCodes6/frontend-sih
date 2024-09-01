@@ -30,15 +30,25 @@ export default function ProgressInputs() {
   async function handleSubmit(event){
     event.preventDefault();
 
-    if(!BW || !HR || !ECG || !BSL || !BP || !BO){
+    if(!BW || !HR || !BSL || !BP || !BO){
       window.alert('invalid inputs')
+      return;
+    }
+    
+    if(typeof(BP) !== "string" || BP.split('/').length !== 2){
+      window.alert('correct form of entering BP is Systolic/Diastolic')
+      return;
+    }
+
+    if(BW < 0 || HR < 0 || BSL < 0 || BO < 0){
+      window.alert('credentials cant be -ve')
       return;
     }
 
     try{
       const response = await axios.post(`${SERVER_URL}/api/metrics/update`,
         {
-          metrics: {BW ,HR ,ECG ,BSL ,
+          metrics: {BW ,HR, BSL ,
           BP:{
             systolic : BP.split('/')[0],
             diastolic: BP.split('/')[1]
@@ -53,9 +63,6 @@ export default function ProgressInputs() {
       )
       console.log(response)
 
-      if(response.ok){
-        console.log("ok")
-      }
 
     }catch(err){
       console.log(err)
@@ -81,11 +88,6 @@ export default function ProgressInputs() {
         <div>
           <Label htmlFor="HR">Heart Rate</Label>
           <Input onChange = {(e) => setHR(e.target.value)} id="HR" type="number">
-          </Input>
-        </div>
-        <div>
-          <Label htmlFor="ECG">ECG</Label>
-          <Input onChange = {(e) => setECG(e.target.value)} id="ECG" type="string">
           </Input>
         </div>
         <div>

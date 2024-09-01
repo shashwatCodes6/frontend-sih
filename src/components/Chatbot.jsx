@@ -14,17 +14,18 @@ import { getLocation } from "./Location";
 import MapComponent from "./MapComponent";
 
 
+const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL
+
 
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
   const [currMessage, setCurrMessage] = useState("")
-  const [messages, setMessages] = useState([
-    {
-      sender: 0,
-      message: "Hi! How can I help you today?"
-    }
-  ]);
+  const [messages, setMessages] = useState([{
+    role: "map",
+    content: ""
+  }]);
+
   const [inProcess, setInProcess] = useState(false)
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [error, setError] = useState(null);
@@ -57,23 +58,29 @@ export default function Chatbot() {
           <CardContent className='h-80 flex flex-col justify-between p-4 space-y-4 overflow-auto'>
             <div className="text-gray-800">
             {
+              messages && 
               messages.map((key, ind) => {
-                return (key.sender === 1 ? (
+                  return key.role === "map" ? (
+                    <div className="h-60">
+                    <MapComponent lat={location.latitude} lng={location.longitude} />
+                    </div>
+                  ) : key.role === "user" ? (
                     <div className="flex justify-end m-2">
                       <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="w-fit border border-black rounded-xl p-3 text-sm">
-                        {key.message}
+                        {key.content}
                       </div>
                     </div>
-                  ):
-                  (
-                    <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="flex justify-start border border-black rounded-xl p-3 w-fit max-w-64 text-sm">
-                      {key.message}
-                    </div>
+                  ) : (
+                      <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="flex justify-start border border-black rounded-xl p-3 w-fit max-w-64 text-sm">
+                        {key.content}
+                      </div>
+                  
                   )
-                )
-              })
+                }
+              )
             }
             </div>
+        {/* <MapComponent lat={location.latitude} lng={location.longitude} /> */}
             <div className="flex items-center gap-2">
               <Input className="flex-1 border-gray-300 shadow-sm rounded-md" placeholder="Type your message..." 
                 onChange = {(e) => {
@@ -83,55 +90,38 @@ export default function Chatbot() {
               {
                 !inProcess ? ( 
                 <button className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none"
+                  id = "SubmitButton"
                   onClick={async () => {
                     const currMsg = currMessage
                     setMessages([...messages, {
-                      sender: 1,
-                      message: currMsg
+                      role: "user",
+                      content: currMsg
                     }])
-                    console.log(messages)
+                    console.log("kyu nahi aa raha: ", messages, currMsg)
                     setCurrMessage("")
                     setInProcess(true)
-                    axios.post("http://localhost:3000/predictDisease", {
-                      text: currMsg
+                    axios.post(`${SERVER_URL}/api/chatbot/converse`, {
+                      messages: (messages.filter(ele => ele.role !== "map")),
+                      newMessage: currMsg
                     }).then(async res => {
                       setInProcess(false)
-                      setMessages([...messages, {
-                          sender: 1,
-                          message: currMsg
-                        },{
-                          sender: 0,
-                          message: res.data[0]
-                        }
-                      ])
-                      // const inputString = res.data[0]
-                      
-                      // const conditionsArray = inputString.split(' ');
+                      console.log("response ye aa raha, mistral: ", res)
+                      if (Array.isArray(res.data)) {
+                        let x = res.data.filter(ele => ele.role !== "system")
+                        x.reverse()
+                        x.push({role: "map",content: ""})
+                        x.reverse()
+                        setMessages(x)
+                      } else {
+                        console.error("Expected res to be an array, but got:", res.data)
+                      }
+                      console.log("message: ", messages, location)
 
-                      // let conditions = [];
-                      // for (let i = 0; i < conditionsArray.length; ) {
-                      //   let j = i;
-                      //   let condition = "";
-                      //   while(j < conditionsArray.length && conditionsArray[j][conditionsArray[j].length - 1] !== ':'){
-                      //     condition += conditionsArray[j++] + ' ';
-                      //   }
-                      //   condition += conditionsArray[j++].slice(0, -1);
-                      //   const probability = parseFloat(conditionsArray[j]);
-                      //   conditions.push({ condition, probability });
-                      //   i = j++;
-                      // }
-
-                      // conditions.sort((a, b) => b.probability - a.probability);
-
-                      // console.log(conditions);
-                      console.log(messages, location)
-                      console.log(res)
-
-                    }).catch(err => {
-                      setInProcess(false)
-                      alert("some error in server, pls try again later")
-                      console.log("some error", err)
-                    })
+                      }).catch(err => {
+                        setInProcess(false)
+                        alert("some error in server, pls try again later")
+                        console.log("some error", err)
+                      })
                     if(location.error){
                       console.log(error);
                     }else{
@@ -149,9 +139,9 @@ export default function Chatbot() {
                 )
               }
             </div>
-            <MapComponent lat={location.latitude} lng={location.longitude} />
           </CardContent>
           <CardFooter className="p-4 border-t">
+          
           </CardFooter>
         </Card>
       )}

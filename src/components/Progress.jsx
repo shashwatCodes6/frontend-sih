@@ -4,13 +4,14 @@ import ProgressInputs from "./ProgressInputs";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+
+
 export default function Progress() {
   const [metrics, setMetrics] = useState([]);
   const [BOArray, setBOArray] = useState([]);
   const [BPArray, setBPArray] = useState([]);
   const [BSLArray, setBSLArray] = useState([]);
   const [BWArray, setBWArray] = useState([]);
-  const [ECGArray, setECGArray] = useState([]);
   const [HRArray, setHRArray] = useState([]);
   const uri=import.meta.env.VITE_APP_SERVER_URL;
   // ye fetch krne hai!!
@@ -46,7 +47,6 @@ export default function Progress() {
         setBPArray(prev => [...prev, ...dataArray.map(({ BP, date }) => ({ value: BP, date }))]);
         setBSLArray(prev => [...prev, ...dataArray.map(({ BSL, date }) => ({ value: BSL, date }))]);
         setBWArray(prev => [...prev, ...dataArray.map(({ BW, date }) => ({ value: BW, date }))]);
-        setECGArray(prev => [...prev, ...dataArray.map(({ ECG, date }) => ({ value: ECG, date }))]);
         setHRArray(prev => [...prev, ...dataArray.map(({ HR, date }) => ({ value: HR, date }))]);
     };
     console.log('values updated');
@@ -92,7 +92,6 @@ export default function Progress() {
         <Chart obj={BOArray} type="BO"/>
         <Chart obj={BSLArray} type="BSL"/>
         <Chart obj={BWArray}type="BWA"/>
-        {/* <Chart obj={ECGArray} type="ECG"/> */}
         <Chart obj={HRArray} type="HR"/>
         <Chart obj={BPArray} type="BP"/>
       </div>
