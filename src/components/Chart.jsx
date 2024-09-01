@@ -141,7 +141,7 @@ export function Chart(props) {
   }, [props.obj, props.type]);
 
   return (
-    <ChartContainer config={props.chartConfig || chartConfig} className=" dark h-2/3 w-full md:w-2/3">
+    <ChartContainer config={props.chartConfig || chartConfig} className=" h-2/3 w-full md:w-2/3">
       <BarChart accessibilityLayer data={props.chartData || chartData}>
         <CartesianGrid vertical={false} />
         <XAxis

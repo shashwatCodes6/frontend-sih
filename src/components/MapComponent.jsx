@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
 import axios from 'axios';
 
+const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
 
 const MapComponent = ({ lat, lng }) => {
 
@@ -9,10 +10,10 @@ const MapComponent = ({ lat, lng }) => {
     
     const searchNearbyPlaces = async (latitude, longitude, type) => {
         const response = await axios.get(
-            `http://localhost:3000/api/places?lat=${latitude}&lng=${longitude}&type=${type}`
+            `${SERVER_URL}/api/places?lat=${latitude}&lng=${longitude}&type=${type}`
         );
         const data = response.data;
-        // console.log(data)
+        console.log(data)
         locations = []
         if (data.results && data.results.length > 0) {
             data.results.map((key, _) => {

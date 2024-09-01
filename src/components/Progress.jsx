@@ -62,7 +62,7 @@ export default function Progress() {
     fetchData();
   }, []);
   return (
-    <div className="dark h-full w-screen flex flex-col gap-8 justify-center m-8">
+    <div className="h-full w-screen flex flex-col gap-8 justify-center m-8">
       <Link to="/">
         <div className="flex">
           <img
@@ -74,13 +74,13 @@ export default function Progress() {
           <p className="text-xl font-bold">Back</p>
         </div>
       </Link>
-      <div className="bg-black text-white grid grid-cols-1  md:grid-cols-2 w-screen items-center">
+      <div className= "grid grid-cols-1  md:grid-cols-2 w-screen items-center">
         <Chart obj={BOArray} type="BO" />
         <Chart obj={BSLArray} type="BSL" />
         <Chart obj={BWArray} type="BW" />
         <Chart obj={HRArray} type="HR" />
       </div>
-      <div className="bg-black text-white flex justify-center pb-8">
+      <div className= "flex justify-center pb-8">
         <Chart obj={BPArray} type="BP" /> 
       </div>
       <ProgressInputs />
