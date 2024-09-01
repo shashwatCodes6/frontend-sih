@@ -3,8 +3,6 @@ import { Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import Footer from './Footer'
 import Cookies from 'js-cookie'
-import { FaBars } from "react-icons/fa";
-import { RxCross2 } from "react-icons/rx";
 export default function Navbar() {
   const handleMenu = () => {
     const navdialog = document.getElementById('navdialog');
@@ -29,7 +27,7 @@ export default function Navbar() {
           }
         </div>
       <button className="p-2 md:hidden " onClick={handleMenu}>
-        <FaBars className='h-8 w-8'/>
+        <img src="https://img.icons8.com/?size=100&id=8113&format=png&color=000000" className='h-8 w-8'></img>
       </button>
       <div id="navdialog" className="hidden z-10  fixed inset-0 w-2/3 bg-black text-white p-3 md:hidden">
         <div className='flex justify-between'>
@@ -38,7 +36,7 @@ export default function Navbar() {
             <span className="text-2xl md:text-3xl lg:text-4xl  md:font-medium font-display">Zk Health</span>
           </Link>
           <button className="p-0 " onClick={handleMenu}>
-           <RxCross2 className='h-8 w-8'/>
+           <img src="https://img.icons8.com/?size=100&id=37795&format=png&color=000000" className='bg-white rounded-xl h-8 w-8' />
           </button>
         </div>
         <div className="mt-6 flex flex-col gap-4">
