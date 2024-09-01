@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { getLocation } from "./Location";
 import MapComponent from "./MapComponent";
+import Cookies from "js-cookie";
 
 
 const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL
@@ -48,7 +49,7 @@ export default function Chatbot() {
   return (
     <div className="w-full p-3 flex flex-col items-center justify-between">
       {open && (
-        <Card className='m-4 z-10 h-96 w-1/2 bg-white shadow-lg rounded-lg'>
+        <Card className='m-4 z-10 h-96 w-full md:w-1/2 bg-white shadow-lg rounded-lg'>
           <CardHeader className='text-xl  font-semibold flex flex-row justify-between items-center p-2 border-b'>
             <span>Chat with AI</span>
             <button onClick={() => setOpen(prev => !prev)} className='text-gray-600 hover:text-gray-900'>
@@ -100,9 +101,16 @@ export default function Chatbot() {
                     console.log("kyu nahi aa raha: ", messages, currMsg)
                     setCurrMessage("")
                     setInProcess(true)
+
+
                     axios.post(`${SERVER_URL}/api/chatbot/converse`, {
                       messages: (messages.filter(ele => ele.role !== "map")),
                       newMessage: currMsg
+                    },{
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `${Cookies.get('refreshToken')}`,
+                      },
                     }).then(async res => {
                       setInProcess(false)
                       console.log("response ye aa raha, mistral: ", res)
@@ -115,12 +123,17 @@ export default function Chatbot() {
                       } else {
                         console.error("Expected res to be an array, but got:", res.data)
                       }
-                      console.log("message: ", messages, location)
+                      // console.log("message: ", messages, location)
 
                       }).catch(err => {
                         setInProcess(false)
                         alert("some error in server, pls try again later")
                         console.log("some error", err)
+                        setOpen(false);
+                        setMessages([{
+                          role: "map",
+                          content: ""
+                        }])
                       })
                     if(location.error){
                       console.log(error);

@@ -22,7 +22,7 @@ const Logout = () => {
             {
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Cookies.get('refreshToken')}`,
+                'Authorization': `${Cookies.get('refreshToken')}`,
               },
             }
           );
