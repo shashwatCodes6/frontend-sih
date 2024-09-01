@@ -25,7 +25,7 @@ export default function Footer() {
       link: "https://github.com/devLucario"
     },{
       name: "Khushi",
-      rollno: "2021UIN3345",
+      rollno: "2022UIN3345",
       link: "https://github.com/KDkhushi"
     },
   ]
