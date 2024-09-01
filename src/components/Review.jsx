@@ -32,7 +32,7 @@ import {
   
   export function Reviews() {
     return (
-      <div className="m-5">
+      <div className="m-5 pb-20 pt-10">
         <div className="text-4xl flex justify-center m-8 font-semibold">
           Reviews
         </div>

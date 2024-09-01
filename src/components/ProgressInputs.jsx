@@ -66,9 +66,12 @@ export default function ProgressInputs() {
 
 
   return (
+    <div className="flex justify-center">
     <Card className='w-1/2'>
       <form onSubmit={handleSubmit}>
-      <CardHeader>Enter your daily Health Metrics</CardHeader>
+      <div className="flex justify-center">
+      <CardHeader className="font-semibold underline">Enter your daily Health Metrics</CardHeader>
+      </div>
       <CardContent className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="BW">Body Weight(in kgs)</Label>
@@ -106,5 +109,6 @@ export default function ProgressInputs() {
       </CardFooter>
       </form>
     </Card>
+    </div>
   )
 }
