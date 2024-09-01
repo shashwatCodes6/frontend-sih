@@ -72,7 +72,7 @@ export default function Chatbot() {
                       </div>
                     </div>
                   ) : (
-                      <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="flex justify-start border border-black rounded-xl p-3 w-fit max-w-64 text-sm">
+                      <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="flex justify-start border border-black rounded-xl p-3 w-fit max-w-80 text-sm">
                         {key.content}
                       </div>
                   

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
+import axios from 'axios';
+
 
 const MapComponent = ({ lat, lng }) => {
 
     let [locations, setLocation] = useState([]);
     
     const searchNearbyPlaces = async (latitude, longitude, type) => {
-        const response = await fetch(
+        const response = await axios.get(
             `http://localhost:3000/api/places?lat=${latitude}&lng=${longitude}&type=${type}`
         );
-        const data = await response.json();
+        const data = response.data;
         // console.log(data)
         locations = []
         if (data.results && data.results.length > 0) {
