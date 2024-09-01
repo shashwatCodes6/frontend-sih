@@ -28,7 +28,7 @@ export default function ProgressInputs() {
   const [BO, setBO] = useState(''); 
 
   async function handleSubmit(event){
-    event.preventDefault();
+    // event.preventDefault();
 
     if(!BW || !HR || !BSL || !BP || !BO){
       window.alert('invalid inputs')
@@ -74,7 +74,7 @@ export default function ProgressInputs() {
 
   return (
     <div className="flex justify-center">
-    <Card className='w-1/2'>
+    <Card className='md:w-1/2'>
       <form onSubmit={handleSubmit}>
       <div className="flex justify-center">
       <CardHeader className="font-semibold underline">Enter your daily Health Metrics</CardHeader>

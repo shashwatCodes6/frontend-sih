@@ -159,7 +159,7 @@ export default function Chatbot() {
         </Card>
       )}
       {!open&&<div className="flex justify-center w-full">
-        <button onClick={() => setOpen(prev => !prev)} className='w-1/4 rounded-xl h-20 bg-black text-white  shadow-lg flex items-center justify-center text-2xl hover:bg-white hover:text-black focus:outline-none'>
+        <button onClick={() => setOpen(prev => !prev)} className='w-full md:w-1/4 rounded-xl h-20 bg-black text-white  shadow-lg flex items-center justify-center text-2xl hover:bg-white hover:text-black focus:outline-none'>
           <span>{messages.length==1?"Click to Start Chat":"Continue Chat"}</span>
         </button>
       </div>}

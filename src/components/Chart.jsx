@@ -78,7 +78,6 @@ const generateChartData = (dataArray, type) => {
   else {
     const CurrWeek = currentDayEntry?currentDayEntry.value:0;
     const PrevWeek = prevDayEntry?prevDayEntry.value:0;
-    
 
     chartData.push({
       weekday: getDayName(targetDate.toISOString()),
@@ -95,6 +94,14 @@ const generateChartData = (dataArray, type) => {
 
 export function Chart(props) {
   const [chartConfig, setChartConfig] = useState(generateChartConfig(props.type));
+  let name;
+  switch(props.type){
+    case "BP":{name="Blood Pressure";break;}
+    case "BO":{name="Blood Oxygen";break;}
+    case "BSL":{name="Blood Sugar Level";break;}
+    case "HR":{name="Heart Rate";break;}
+    case "BW":{name="Body Weight";break;}
+  }
 
   const tempArr = [
     { weekday: "Sunday", CurrWeek: 186, PrevWeek: 80 },
@@ -134,7 +141,7 @@ export function Chart(props) {
   }, [props.obj, props.type]);
 
   return (
-    <ChartContainer config={props.chartConfig || chartConfig} className="h-2/3 w-full md:w-2/3">
+    <ChartContainer config={props.chartConfig || chartConfig} className=" dark h-2/3 w-full md:w-2/3">
       <BarChart accessibilityLayer data={props.chartData || chartData}>
         <CartesianGrid vertical={false} />
         <XAxis
@@ -159,6 +166,7 @@ export function Chart(props) {
           </>
         )}
       </BarChart>
+      <p className="text-center text-xl font-semibold font-serif">{name}</p>
     </ChartContainer>
   );
 }
