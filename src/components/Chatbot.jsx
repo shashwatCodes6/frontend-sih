@@ -74,7 +74,7 @@ export default function Chatbot() {
                           </div>
                         </div>
                       ) : (
-                        <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="flex justify-start border border-black rounded-xl p-3 w-fit max-w-80 text-sm">
+                        <div key={ind * 10 + Math.floor(Math.random() * 1000)} className="flex justify-start border border-black rounded-xl p-3 w-fit max-w-80 text-sm m-2">
                           {key.content}
                         </div>
 
@@ -99,7 +99,7 @@ export default function Chatbot() {
                               role: "user",
                               content: currMsg
                             }])
-                            console.log("kyu nahi aa raha: ", messages, currMsg)
+                            // console.log("kyu nahi aa raha: ", messages, currMsg)
                             setCurrMessage("")
                             setInProcess(true)
 
@@ -114,7 +114,7 @@ export default function Chatbot() {
                               },
                             }).then(async res => {
                               setInProcess(false)
-                              console.log("response ye aa raha, mistral: ", res)
+                              // console.log("response ye aa raha, mistral: ", res)
                               if (Array.isArray(res.data)) {
                                 let x = res.data.filter(ele => ele.role !== "system")
                                 x.reverse()
