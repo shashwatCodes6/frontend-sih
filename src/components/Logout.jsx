@@ -11,21 +11,22 @@ const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function logout() {
+    const logout = async () => {
       try {
+        let token = Cookies.get('refreshToken');
         Cookies.remove('accessToken');
         Cookies.remove('refreshToken');
-        
+  
         const response = await axios.post(
-            `${SERVER_URL}/api/user/logout`,
-            {},
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `${Cookies.get('refreshToken')}`,
-              },
-            }
-          );
+          `${SERVER_URL}/api/user/logout`,
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `${token}`,
+            },
+          }
+        );  
         if (response.status === 200) {
           window.alert('Logged out successfully');
         } else {
@@ -35,12 +36,13 @@ const Logout = () => {
         console.error('Logout error:', error);
         window.alert('Some error occurred, try again later');
       } finally {
-        window.location.href = FRONTEND_URL
+        window.location.href = FRONTEND_URL;
       }
-    }
-
+    };
+  
     logout();
   }, [navigate]);
+  
 
   return null;
 };
